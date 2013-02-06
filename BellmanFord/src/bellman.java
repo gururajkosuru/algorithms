@@ -1,3 +1,5 @@
+import org.w3c.dom.NodeList;
+
 
 
 
@@ -30,6 +32,37 @@ public class bellman {
 
 		cost[destination][maxEdges] = tempMin;
 		return tempMin;
+	}
+
+	private void manfordIterative(){
+		int[][] cost2 = new int[2][nodeList.length];
+
+		for(int j=0;j<2;j++)
+			for(int i=0;i<nodeList.length;i++){
+				cost2[j][i] = Integer.MAX_VALUE;
+			}
+		cost2[0][0] = 0;
+		for(int j=0;j<nodeList.length;j++){
+			for(int i=0;i<nodeList.length;i++){
+				int tempMin = cost2[0][nodeList[i].number];
+				node dest = nodeList[i];
+				for(int e:dest.edges){
+					int restPlace = edgeList[e].vertices[0] == i? edgeList[e].vertices[1]: edgeList[e].vertices[0];
+					if(cost2[0][restPlace]<Integer.MAX_VALUE)
+						tempMin = tempMin < cost2[0][restPlace]+edgeList[e].weight? tempMin : cost2[0][restPlace]+edgeList[e].weight; 
+				}
+				cost2[1][i] = tempMin;
+			}
+			for(int i=0;i<nodeList.length;i++){
+				System.out.print(" "+cost2[1][i]);
+				cost2[0][i] = cost2[1][i];
+				}
+			System.out.println();
+			
+		}
+
+
+
 	}
 	private void process(int[][] edgelistGiven, int size,int source) {
 
@@ -75,6 +108,7 @@ public class bellman {
 				System.out.print(" "+bell.cost[i][j]);
 			System.out.println();
 		}
+		bell.manfordIterative();
 	}
 
 }
