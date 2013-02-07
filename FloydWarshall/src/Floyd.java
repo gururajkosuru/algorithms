@@ -6,6 +6,7 @@
 public class Floyd {
 	int source;
 	int[][][] cost;
+	int[][] path;
 	node[] nodeList;
 	edge[] edgeList;
 	Floyd(int source){
@@ -18,6 +19,7 @@ public class Floyd {
 	private void process(int[][] edgelistGiven, int size,int source) {
 
 		cost = new int[size][size][size];
+		path = new int[size][size];
 		nodeList = new node[size];
 		edgeList = new edge[edgelistGiven.length];
 		for(int i=0;i<size;i++)
@@ -45,16 +47,39 @@ public class Floyd {
 						cost[i][j][k] = Integer.MAX_VALUE;
 						for(int e:nodeList[i].edges){
 							int otherVert = edgeList[e].vertices[0] == nodeList[i].number?edgeList[e].vertices[1]:edgeList[e].vertices[0];
-							if(otherVert==nodeList[j].number)
+							if(otherVert==nodeList[j].number){
 								cost[i][j][k] = edgeList[e].weight;
+
+							}
 						}
 
 					}
 
 				}
+		
+		for(int i=0;i<size;i++)
+			for(int j=0;j<size;j++)
+				path[i][j] = -1;
 
 	}
 
+	private void warshall(int size) {
+		for(int k=1;k<size;k++)
+			for(int i=0;i<size;i++)
+				for(int j=0;j<size;j++){
+					cost[i][j][k] = cost[i][j][k-1];
+					//path[i][j] = k-1;
+					if(cost[i][j][k] > cost[i][k][k-1]+cost[k][j][k-1] && cost[i][k][k-1]<Integer.MAX_VALUE && cost[k][j][k-1]<Integer.MAX_VALUE){
+						cost[i][j][k]= cost[i][k][k-1]+cost[k][j][k-1];
+						path[i][j] = k;
+					}
+				}
+
+	}
+
+	int min(int a,int b){
+		return a< b? a:b;
+	}
 
 	public static void main(String farts[]){
 		int source = 0,size=6;
@@ -70,23 +95,18 @@ public class Floyd {
 			System.out.println();
 		}
 
+
+		for(int i=0;i<size;i++){
+			for(int j=0;j<size;j++)
+				System.out.print(" "+floyd.path[i][j]);
+			System.out.println();
+		}
+
+
 	}
 
 
 
 
-	private void warshall(int size) {
-		for(int k=1;k<size;k++)
-			for(int i=0;i<size;i++)
-				for(int j=0;j<size;j++){
-					cost[i][j][k] = cost[i][j][k-1];
-					if(cost[i][k][k-1]<Integer.MAX_VALUE && cost[k][j][k-1]<Integer.MAX_VALUE)
-						cost[i][j][k] = min(cost[i][j][k-1],cost[i][k][k-1]+cost[k][j][k-1]);
-				}
 
-	}
-
-	int min(int a,int b){
-		return a< b? a:b;
-	}
 }
