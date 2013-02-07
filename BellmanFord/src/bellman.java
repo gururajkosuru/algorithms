@@ -36,7 +36,7 @@ public class bellman {
 
 	private void manfordIterative(){
 		int[][] cost2 = new int[2][nodeList.length];
-
+		int[] path = new int[nodeList.length];
 		for(int j=0;j<2;j++)
 			for(int i=0;i<nodeList.length;i++){
 				cost2[j][i] = Integer.MAX_VALUE;
@@ -48,20 +48,27 @@ public class bellman {
 				node dest = nodeList[i];
 				for(int e:dest.edges){
 					int restPlace = edgeList[e].vertices[0] == i? edgeList[e].vertices[1]: edgeList[e].vertices[0];
-					if(cost2[0][restPlace]<Integer.MAX_VALUE)
-						tempMin = tempMin < cost2[0][restPlace]+edgeList[e].weight? tempMin : cost2[0][restPlace]+edgeList[e].weight; 
+					if(cost2[0][restPlace]<Integer.MAX_VALUE){
+						if(tempMin>cost2[0][restPlace]+edgeList[e].weight){
+							tempMin = cost2[0][restPlace]+edgeList[e].weight;
+							path[dest.number] = restPlace;
+						}
+					}
 				}
 				cost2[1][i] = tempMin;
 			}
 			for(int i=0;i<nodeList.length;i++){
 				System.out.print(" "+cost2[1][i]);
 				cost2[0][i] = cost2[1][i];
-				}
+			}
 			System.out.println();
-			
+
+
+
 		}
 
-
+		for(int i=0;i<nodeList.length;i++)
+			System.out.print(" "+path[i]);
 
 	}
 	private void process(int[][] edgelistGiven, int size,int source) {
