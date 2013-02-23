@@ -14,12 +14,12 @@ public class balanceTree {
 		return curr;
 	}
 	
-	void preorder(node root, node[] arr) {
+	void inorder(node root, node[] arr) {
 		if(root == null)
 			return;
-		preorder(root.left, arr);
+		inorder(root.left, arr);
 		arr[index++] = root;
-		preorder(root.right, arr);
+		inorder(root.right, arr);
 	}
 	
 	void BST(node root) {
@@ -44,7 +44,7 @@ public class balanceTree {
 		n1.left.left.left = new node(1);
 		n1.left.left.right = new node(3);
 		node[] arr = new node[7];
-		b.preorder(n1, arr);
+		b.inorder(n1, arr);
 		b.BST(n1);
 		node root = b.balance(0, 6, arr);
 		b.BST(root);
